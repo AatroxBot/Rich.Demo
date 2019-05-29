@@ -1,0 +1,25 @@
+﻿@{
+    ViewBag.Title = "Document";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@this.Partial("Document-js")
+@this.RefStyle("~/Content/editormd/css/editormd.min.css")
+@this.RefScript("~/Content/editormd/editormd.js")
+
+
+<br />
+标题：<input type="text" style="width:500px;" data-bind="value:Title" />
+<br />
+<br />
+标签：<input type="text" style="width:500px;" data-bind="value:Tag" />&nbsp;&nbsp;<input type="button" value="保存" data-bind="value:Id()!=0?'更新':'添加',click:Save" />&nbsp;&nbsp;<input type="button" value="添加新内容" data-bind="click:NewContent,visible:Id()!=0" />
+<br />
+@*<br />
+    摘要：<textarea style="width:500px;height:110px;" data-bind="value:Content"></textarea>&nbsp;&nbsp;<input type="button" value="保存" data-bind="value:Id()?'更新':'添加',click:Save" />&nbsp;&nbsp;<input type="button" value="添加新内容" data-bind="click:NewContent,visible:Id()" />
+    <br />*@
+<br />
+
+<div id="doc-editormd">
+    <textarea style="display:none;">@{ this.Write(this.ViewBag.Doc.Content); }</textarea>
+</div>
+

@@ -1,0 +1,44 @@
+﻿<script>
+
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        vm.Init();
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+
+        me.DeleteUrl = "@this.Href("~/WikiManage/WikiDocument/Delete")";
+
+        me.Add = function () {
+            window.open("@this.Href("~/WikiManage/WikiDocument/Document")");
+        }
+        me.Edit = function () {
+            window.open("@this.Href("~/WikiManage/WikiDocument/Document")" + "?id=" + me.DataTable.SelectedModel().Id());
+        }
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+            me.LoadModels();
+        }
+
+        me.LoadModels = function (page) {
+            me.DataTable.SelectedModel(null);
+            var params = me.SearchModel();
+            params.page = page || 1;
+            $ace.get("@this.Href("~/WikiManage/WikiDocument/GetModels")", params, function (result) {
+                me.DataTable.SetPagedData(result.Data);
+            }
+          );
+        }
+    }
+
+</script>
+

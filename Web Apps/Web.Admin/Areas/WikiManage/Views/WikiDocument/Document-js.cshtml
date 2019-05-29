@@ -1,0 +1,75 @@
+﻿<script>
+    var docEditor;
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        ko.applyBindings(vm);
+        vm.Init();
+
+        docEditor = editormd("doc-editormd", {
+            width: "90%",
+            height: 1000,
+            syncScrolling: "single",
+            codeFold: true,
+            //htmlDecode: true,
+            path: "@this.Href("~/Content/editormd/lib/")",
+            saveHTMLToTextarea: true
+        });
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+
+        me.Id = _ob(@this.Raw("'" + ViewBag.Doc.Id + "'"));
+        me.Title = _ob(@Html.Raw("'" + ViewBag.Doc.Title + "'"));
+        me.Tag = _ob(@this.Raw("'" + ViewBag.Doc.Tag + "'"));
+        me.Content = _ob(@this.Raw("'" + ViewBag.Doc.Content + "'"));
+
+        me.Save = function () {
+            if (!me.Title()) {
+                $ace.alert("标题不能为空");
+                return;
+            }
+
+            var markdownCode = docEditor.getMarkdown();
+            var html = docEditor.getHTML();
+            var param = {};
+            param.Title = me.Title();
+            param.Tag = me.Tag();
+            //param.Content = me.Content();
+            param.Content = markdownCode;
+            param.MarkdownCode = markdownCode;
+            param.HtmlContent = html;
+
+            if (me.Id()!=0) {
+                param.Id = me.Id();
+                $ace.post("@this.Href("~/WikiManage/WikiDocument/Update")", param, function (result) {
+                    $ace.msg("更新成功");
+                }
+                );
+            }
+            else {
+                $ace.post("@this.Href("~/WikiManage/WikiDocument/Add")", param, function (result) {
+                    $ace.alert("添加成功", function () {
+                        window.location.href = window.location.pathname + "?id=" + result.Data;
+                    });
+                }
+              );
+            }
+        }
+
+        me.NewContent = function () {
+            window.location.href = window.location.pathname;
+        }
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+        }
+    }
+
+</script>
