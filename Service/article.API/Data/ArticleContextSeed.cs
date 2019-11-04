@@ -91,8 +91,8 @@ namespace article.API.Data
         {
             return new List<ArticleItem>()
             {
-                 new ArticleItem { Id = 1, Pid = 0, Title = "First Catelog", Content = ".NET Black & White Mug", ImagePath = "1.png",Checked=true },
-                 new ArticleItem { Id = 2, Pid = 1, Title = "Next Catelog", Content = ".NET Bot Black Hoodie",  ImagePath = "2.png",Checked=true  },
+                 new ArticleItem {  Pid = 0, Title = "First Catelog", Content = ".NET Black & White Mug", ImagePath = "1.png",Checked=true,IsDelete=false },
+                 new ArticleItem {  Pid = 1, Title = "Next Catelog", Content = ".NET Bot Black Hoodie",  ImagePath = "2.png",Checked=true ,IsDelete=false },
             };
         }
 
