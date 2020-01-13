@@ -1,0 +1,111 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_LayoutPage.cshtml";
+}
+
+@this.Partial("Index-js")
+
+<div class="topPanel">
+    <div class="toolbar">
+        <div class="btn-group">
+            <a class="btn btn-primary" onclick="$ace.reload()"><span class="glyphicon glyphicon-refresh"></span></a>
+        </div>
+        <div class="btn-group">
+            <button class="btn btn-primary" data-bind="click:Edit,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-pencil-square-o"></i>修改菜单</button>
+            <button class="btn btn-primary" data-bind="click:Delete,attr:{disabled:!DataTable.SelectedModel()}"><i class="fa fa-trash-o"></i>删除菜单</button>
+            <button class="btn btn-primary" data-bind="click:Add"><i class="fa fa-plus"></i>新建菜单</button>
+        </div>
+    </div>
+    <div class="search">
+        <table>
+            <tr>
+                <td>
+                    <div class="input-group">
+                        <input id="txt_keyword" type="text" class="form-control" placeholder="请输入要查询关键字" style="width: 200px;" data-bind="value:SearchModel().keyword">
+                        <span class="input-group-btn">
+                            <button id="btn_search" type="button" class="btn  btn-primary" data-bind="click:Search"><i class="fa fa-search"></i></button>
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+
+
+
+<div class="table-responsive">
+    <table class="table table-hover" data-bind="with:DataTable">
+        <thead>
+            <tr>
+                <th style="width:20px;"></th>
+                <th>名称</th>
+                <th>文档</th>
+                <th>文档标签</th>
+                <th>是否显示</th>
+                <th>排序</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach:Models">
+            <tr data-bind="click:$parent.SelectRow, attr: { id: $data.Id, 'parent-id': $data.ParentId }">
+                <td data-bind="text:$parent.GetOrdinal($index())"></td>
+                <td>
+                    <!-- ko if: $data.HasChildren -->
+                    <div onclick="expandChildren(this);" style="left:0px;cursor:pointer;" class="glyphicon glyphicon-triangle-bottom" data-bind=""></div>
+                    <!-- /ko -->
+                    <!-- ko if: !$data.HasChildren() -->
+                    <div style="width:12px;height:12px;display:inline-block;"></div>
+                    <!-- /ko -->
+                    <span data-bind="html:appendRetract($data.Level())"></span>
+                    <span data-bind="text:$data.Data.Name"></span>
+                </td>
+                <td>
+                    <a href="#" target="_blank" data-bind="text:$ace.getOptionTextByValue($root.Documents(),$data.Data.DocumentId(),'Id','Title'),attr:{href:'@Url.Content("~/WikiManage/WikiDocument/Document?id=")' + $data.Data.DocumentId()}"></a>
+                </td>
+                <td data-bind="text:$ace.getOptionTextByValue($root.Documents(),$data.Data.DocumentId(),'Id','Tag')"></td>
+                <td data-bind="boolString:$data.Data.IsEnabled"></td>
+                <td data-bind="boolString:$data.Data.SortCode"></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+
+
+<dialogbox data-bind="with:Dialog">
+
+    <form id="form1">
+        <table class="form">
+            <tr>
+                <td class="formTitle">上级</td>
+                <td class="formValue">
+                    <select id="ParentId" name="ParentId" class="form-control" data-bind="options:$root.RootMenuItems,optionsText:'Name',optionsValue:'Id', optionsCaption:'-请选择-',value:Model().ParentId"></select>
+                </td>
+                <td class="formTitle">名称</td>
+                <td class="formValue">
+                    <input id="Name" name="Name" type="text" class="form-control required" placeholder="请输入名称" data-bind="value:Model().Name" />
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">文档</td>
+                <td class="formValue">
+                    <select id="DocumentId" name="DocumentId" class="form-control" data-bind="options:$root.Documents,optionsText:'Title',optionsValue:'Id', optionsCaption:'-请选择-',value:Model().DocumentId"></select>
+                </td>
+
+                <td class="formTitle">是否显示</td>
+                <td class="formValue">
+                    <label><input type="radio" name="IsEnabled" value="true" data-bind="typedChecked:Model().IsEnabled,dataType:'bool'" />是</label>
+                    <label><input type="radio" name="IsEnabled" value="false" data-bind="typedChecked:Model().IsEnabled,dataType:'bool'" />否</label>
+                </td>
+            </tr>
+            <tr>
+                <td class="formTitle">排序</td>
+                <td class="formValue">
+                    <input id="SortCode" name="SortCode" type="text" class="form-control" placeholder="请输入排序" data-bind="value:Model().SortCode" />
+                </td>
+            </tr>
+        </table>
+    </form>
+
+</dialogbox>

@@ -1,0 +1,128 @@
+﻿<script>
+
+    var _vm;
+    $(function () {
+        var vm = new ViewModel();
+        _vm = vm;
+        vmExtend.call(vm);
+        ko.applyBindings(vm);
+        vm.Init();
+    });
+
+    function ViewModel() {
+        var me = this;
+        ViewModelBase.call(me);
+        vmExtend.call(me);
+
+        me.DeleteUrl = "@this.Href("~/WikiManage/WikiMenu/Delete")";
+        me.DataTable = new DataTableBase(me);
+        me.Dialog = new Dialog(me);
+
+        me.RootMenuItems = _oba(@this.RawSerialize( ViewBag.RootMenuItems));
+        me.Documents = _oba(@this.RawSerialize(ViewBag.Documents));
+    }
+    function vmExtend() {
+        var me = this;
+
+        me.Init = function () {
+            me.LoadModels();
+        }
+
+        me.LoadModels = function () {
+            me.DataTable.SelectedModel(null);
+            var data = me.SearchModel();
+            $ace.get("@this.Href("~/WikiManage/WikiMenu/GetModels")", data, function (result) {
+                me.DataTable.SetModels(result.Data);
+            }
+          );
+        }
+    }
+
+    function Dialog(vm) {
+        var me = this;
+        DialogBase.call(me);
+
+
+        me.OnOpen = function () {
+            var model = me.EditModel();
+            if (model) {
+                var dataModel = model.Data;
+                var bindModel = $ko.toJS(dataModel);
+                me.Model(bindModel);
+            }
+            else {
+                me.EditModel(null);
+                me.Model({ IsEnabled: true });
+            }
+        }
+
+        me.OnSave = function () {
+            var model = me.Model();
+
+            if (!$('#form1').formValid()) {
+                return false;
+            }
+
+            if (me.EditModel()) {
+                $ace.post("@this.Href("~/WikiManage/WikiMenu/Update")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                }
+               );
+            }
+            else {
+                $ace.post("@this.Href("~/WikiManage/WikiMenu/Add")", model, function (result) {
+                    $ace.msg(result.Msg);
+                    me.Close();
+                    vm.LoadModels();
+                    if (!result.Data.ParentId) {
+                        vm.RootMenuItems.push(result.Data);
+                    }
+                }
+             );
+            }
+        }
+    }
+
+
+    function expandChildren(ele) {
+
+        $ele = $(ele);
+
+        var $tr = $ele.parent().parent();
+        var id = $tr.attr("id");
+
+        var selector = "tr[parent-id='" + id + "']";
+        var $children = $tr.siblings(selector);
+
+        if ($ele.hasClass("glyphicon-triangle-bottom")) {
+            $children.hide();
+            $ele.removeClass("glyphicon-triangle-bottom");
+            $ele.addClass("glyphicon-triangle-right");
+        }
+        else {
+            $children.show();
+            $ele.removeClass("glyphicon-triangle-right");
+            $ele.addClass("glyphicon-triangle-bottom");
+        }
+
+        for (var i = 0; i < $children.length; i++) {
+            var $child = $($children[i]);
+
+            var $iconNodes = $child.find(".glyphicon");
+            if ($iconNodes.length > 0) {
+                expandChildren($iconNodes[0]);
+            }
+        }
+    }
+    function appendRetract(level) {
+        var s = "";
+        for (var i = 0; i < level * 4; i++) {
+            s += "&nbsp;";
+        }
+        return s;
+    }
+
+</script>
+

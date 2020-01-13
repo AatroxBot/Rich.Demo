@@ -40,13 +40,13 @@ namespace article.API.Controllers
                 return Ok(items);
             }
 
-            var totalItems = await _articleContext.ArticleItems
-                .Where(p=>p.Checked==true&&p.IsDelete==false)
-                .ToListAsync();
+          //  var totalItems = await _articleContext.ArticleItems
+          //.Where(p => p.Checked == true && p.IsDelete == false)
+          //.ToListAsync();
 
             var itemsOnPage = await _articleContext.ArticleItems
                 .OrderBy(c => c.Id)
-                .Skip(pageSize * (pageIndex-1))
+                .Skip(pageSize * (pageIndex - 1))
                 .Take(pageSize)
                 .ToListAsync();
 
@@ -54,10 +54,10 @@ namespace article.API.Controllers
             ApiReturnModel.PageInfo pageResult = new ApiReturnModel.PageInfo();
             pageResult.page = pageIndex;
             pageResult.pageSize = pageSize;
-            pageResult.pageCount = totalItems.Count;
+            //pageResult.pageCount = totalItems.Count;
             return Ok(new ApiReturnModel()
             {
-                result = 1 ,
+                result = 1,
                 data = itemsOnPage,
                 message = "查询成功",
                 pageInfo = pageResult
@@ -75,6 +75,8 @@ namespace article.API.Controllers
 
             var idsToSelect = numIds
                 .Select(id => id.Value);
+
+
 
             var items = await _articleContext.ArticleItems.Where(ci => idsToSelect.Contains(ci.Id)).ToListAsync();
 
@@ -158,9 +160,9 @@ namespace article.API.Controllers
             }
             else // Just save the updated product because the Product's Price hasn't changed.
             {
-               
+
             }
-            
+
 
             return CreatedAtAction(nameof(ItemByIdAsync), new { id = productToUpdate.Id }, null);
         }
@@ -174,12 +176,12 @@ namespace article.API.Controllers
             {
                 Pid = product.Pid,
                 Title = product.Title,
-                Tag=product.Tag,
+                Tag = product.Tag,
                 Content = product.Content,
                 ImagePath = product.ImagePath,
                 Checked = product.Checked,
-                CreateUser= product.CreateUser,
-                CreateTime=DateTime.Now
+                CreateUser = product.CreateUser,
+                CreateTime = DateTime.Now
             };
 
             _articleContext.ArticleItems.Add(item);
@@ -193,7 +195,7 @@ namespace article.API.Controllers
         //DELETE api/v1/[controller]/id
         [Route("{id}")]
         [HttpDelete]
-        public async Task<ActionResult> DeleteProductAsync(int id) 
+        public async Task<ActionResult> DeleteProductAsync(int id)
         {
             var product = _articleContext.ArticleItems.SingleOrDefault(x => x.Id == id);
 

@@ -31,5 +31,8 @@ namespace article.API.Model
        
         public bool IsDelete { get; set; }
 
+        public string ZipPath { get; set; }
+        public int DownCount { get; set; }
+
     }
 }

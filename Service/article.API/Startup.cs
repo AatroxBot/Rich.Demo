@@ -164,6 +164,7 @@ namespace article.API
 
         public static IServiceCollection AddCustomDbContext(this IServiceCollection services, IConfiguration configuration)
         {
+            var str = configuration["ConnectionString"];
             services.AddDbContext<ArticleContext>(options =>
             {
                 options.UseSqlServer(configuration["ConnectionString"],

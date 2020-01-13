@@ -27,7 +27,7 @@ namespace article.API.Data
             public ArticleContext CreateDbContext(string[] args)
             {
                 var optionsBuilder = new DbContextOptionsBuilder<ArticleContext>()
-                    .UseSqlServer("Server=wms.test.db.richtj.com;Database=ArticleDb;User Id=sa;Password=Rich@123;");
+                    .UseSqlServer("Server=localhost; Database=ArticleDb; Trusted_Connection=True;");
 
                 return new ArticleContext(optionsBuilder.Options);
             }
