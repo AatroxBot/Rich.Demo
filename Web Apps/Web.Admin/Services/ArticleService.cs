@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
 using Web.Admin.Common;
 using Web.Admin.Infrastructure;
+using Web.Admin.Services.ModelDTOs;
 using Web.Admin.ViewModels;
 
 namespace Web.Admin.Services
@@ -91,5 +92,65 @@ namespace Web.Admin.Services
 
             var jsonResponse = await response.Content.ReadAsStringAsync();
         }
+
+
+        public async Task<List<WikiMenuModel>> GetRootWikiMenuItems()
+        {
+            var uri = API.Article.GetRootWikiMenuItems(_remoteServiceBaseUrl);
+            var responseString = await _httpClient.GetStringAsync(uri);
+            var response = JsonConvert.DeserializeObject<List<WikiMenuModel>>(responseString);
+            return response;
+        }
+
+
+        public async Task<List<WikiMenuModel>> GetWikiMenuItems()
+        {
+            var uri = API.Article.GetWikiMenuItems(_remoteServiceBaseUrl);
+            var responseString = await _httpClient.GetStringAsync(uri);
+            var response = JsonConvert.DeserializeObject<List<WikiMenuModel>>(responseString);
+            return response;
+        }
+
+
+        public async Task<WikiMenuModel> Add(WikiMenuModel input)
+        {
+            var uri = API.Article.AddMenu(_remoteServiceBaseUrl);
+
+            var Content = new StringContent(JsonConvert.SerializeObject(input), System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync(uri, Content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                var str = await response.Content.ReadAsStringAsync();
+                var model= JsonConvert.DeserializeObject<WikiMenuModel>(str);
+                return model;
+            }
+            return new WikiMenuModel();
+        }
+
+
+        public async Task Delete(string id)
+        {
+            var uri = API.Article.DeleteMenu(_remoteServiceBaseUrl, id);
+            var response = await _httpClient.DeleteAsync(uri);
+
+        }
+
+        public async Task Update(WikiMenuModel input)
+        {
+            var uri = API.Article.AddMenu(_remoteServiceBaseUrl);
+
+            var Content = new StringContent(JsonConvert.SerializeObject(input), System.Text.Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PutAsync(uri, Content);
+
+            response.EnsureSuccessStatusCode();
+
+            var jsonResponse = await response.Content.ReadAsStringAsync();
+        }
+
+
+
     }
 }

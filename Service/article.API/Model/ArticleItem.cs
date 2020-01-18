@@ -11,7 +11,7 @@ namespace article.API.Model
         [Required]
         public int Id { get; set; }
         [Required]
-        public int Pid { get; set; }
+        public string Pid { get; set; }
 
         public string Title { get; set; }
 

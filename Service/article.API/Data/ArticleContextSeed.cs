@@ -91,8 +91,8 @@ namespace article.API.Data
         {
             return new List<ArticleItem>()
             {
-                 new ArticleItem {  Pid = 0, Title = "First Catelog", Content = ".NET Black & White Mug", ImagePath = "1.png",Checked=true,IsDelete=false },
-                 new ArticleItem {  Pid = 1, Title = "Next Catelog", Content = ".NET Bot Black Hoodie",  ImagePath = "2.png",Checked=true ,IsDelete=false },
+                 new ArticleItem {  Pid = Guid.NewGuid().ToString("N"), Title = "First Catelog", Content = ".NET Black & White Mug", ImagePath = "1.png",Checked=true,IsDelete=false },
+                 new ArticleItem {  Pid = Guid.NewGuid().ToString("N"), Title = "Next Catelog", Content = ".NET Bot Black Hoodie",  ImagePath = "2.png",Checked=true ,IsDelete=false },
             };
         }
 
@@ -114,7 +114,7 @@ namespace article.API.Data
             var articleItem = new ArticleItem()
             {
                 Id = Convert.ToInt32(column[Array.IndexOf(headers, "Id")].Trim('"').Trim()),
-                Pid = Convert.ToInt32(column[Array.IndexOf(headers, "Pid")].Trim('"').Trim()),
+                Pid =column[Array.IndexOf(headers, "Pid")].Trim('"').Trim(),
                 Title = column[Array.IndexOf(headers, "Title")].Trim('"').Trim(),
                 Content = column[Array.IndexOf(headers, "Content")].Trim('"').Trim(),
                 ImagePath = column[Array.IndexOf(headers, "ImagePath")].Trim('"').Trim(),

@@ -17,6 +17,8 @@ namespace article.API.Data
         }
         public DbSet<ArticleItem> ArticleItems { get; set; }
 
+        public DbSet<MenuItem> MenuItems { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new ArticleItemEntityTypeConfiguration());

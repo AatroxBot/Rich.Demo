@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Web.Admin.Common;
 using Web.Admin.Services;
+using Web.Admin.Services.ModelDTOs;
 using Web.Admin.ViewModels;
 
 namespace Web.Admin.Areas.WikiManage.Controllers

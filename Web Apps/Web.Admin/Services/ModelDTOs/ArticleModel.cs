@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Web.Admin.ViewModels
+namespace Web.Admin.Services.ModelDTOs
 {
     public class ArticleModel
     {
         
         public int Id { get; set; }
        
-        public int Pid { get; set; }
+        public string Pid { get; set; }
 
         public string Title { get; set; }
 

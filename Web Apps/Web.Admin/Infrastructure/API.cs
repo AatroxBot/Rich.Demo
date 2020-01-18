@@ -45,6 +45,26 @@ namespace Web.Admin.Infrastructure
             {
                 return $"{baseUri}/{id}";
             }
+
+            public static string GetRootWikiMenuItems(string baseUri)
+            {
+                return $"{baseUri}/menus/{string.Empty}";
+            }
+
+            public static string GetWikiMenuItems(string baseUri)
+            {
+                return $"{baseUri}/menus/all";
+            }
+
+
+            public static string AddMenu(string baseUri)
+            {
+                return $"{baseUri}/menus";
+            }
+            public static string DeleteMenu(string baseUri, string id)
+            {
+                return $"{baseUri}/menus/{id}";
+            }
         }
     }
 }

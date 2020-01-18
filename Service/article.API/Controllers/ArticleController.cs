@@ -31,7 +31,6 @@ namespace article.API.Controllers
             if (!string.IsNullOrEmpty(ids))
             {
                 var items = await GetItemsByIdsAsync(ids);
-
                 if (!items.Any())
                 {
                     return BadRequest("ids value invalid. Must be comma-separated list of numbers");
@@ -92,6 +91,7 @@ namespace article.API.Controllers
             {
                 return BadRequest();
             }
+
 
             var item = await _articleContext.ArticleItems.SingleOrDefaultAsync(ci => ci.Id == id);
 
@@ -184,7 +184,7 @@ namespace article.API.Controllers
                 CreateTime = DateTime.Now
             };
 
-            _articleContext.ArticleItems.Add(item);
+            await _articleContext.ArticleItems.AddAsync(item);
 
             await _articleContext.SaveChangesAsync();
 
